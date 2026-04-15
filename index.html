@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .calculator {
+            background-color: #333;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        .display {
+            background-color: #222;
+            color: white;
+            font-size: 2em;
+            text-align: right;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            min-height: 40px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 60px);
+            gap: 10px;
+        }
+        button {
+            font-size: 1.5em;
+            padding: 0;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            background-color: pink;
+            color: white;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        button:hover {
+            background-color: lightpink;
+        }
+        .operator {
+            background-color: pink;
+            border-radius: 50%;
+        }
+        .operator:hover {
+            background-color: lightpink;
+        }
+        .equal {
+            background-color: pink;
+        }
+        .equal:hover {
+            background-color: lightpink;
+        }
+        .clear {
+            background-color: pink;
+        }
+        .clear:hover {
+            background-color: lightpink;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <button class="operator" onclick="appendToDisplay('+')">+</button>
+            <button class="clear" onclick="clearDisplay()">C</button>
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button class="operator" onclick="appendToDisplay('-')">-</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button class="operator" onclick="appendToDisplay('*')">*</button>
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button class="operator" onclick="appendToDisplay('/')">/</button>
+            <button onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+            <button class="equal" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let currentInput = '';
+        let operator = '';
+        let previousInput = '';
+
+        function appendToDisplay(value) {
+            if (['+', '-', '*', '/'].includes(value)) {
+                if (currentInput !== '') {
+                    if (previousInput !== '' && operator !== '') {
+                        calculate();
+                    }
+                    operator = value;
+                    previousInput = currentInput;
+                    currentInput = '';
+                }
+            } else {
+                currentInput += value;
+                display.textContent = currentInput || '0';
+            }
+        }
+
+        function clearDisplay() {
+            display.textContent = '0';
+            currentInput = '';
+            operator = '';
+            previousInput = '';
+        }
+
+        function calculate() {
+            if (previousInput !== '' && currentInput !== '' && operator !== '') {
+                let result;
+                const prev = parseFloat(previousInput);
+                const curr = parseFloat(currentInput);
+                switch (operator) {
+                    case '+':
+                        result = prev + curr;
+                        break;
+                    case '-':
+                        result = prev - curr;
+                        break;
+                    case '*':
+                        result = prev * curr;
+                        break;
+                    case '/':
+                        result = curr !== 0 ? prev / curr : 'Error';
+                        break;
+                }
+                display.textContent = result;
+                currentInput = result.toString();
+                operator = '';
+                previousInput = '';
+            }
+        }
+    </script>
+</body>
+</html>
